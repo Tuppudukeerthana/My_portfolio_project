@@ -2,26 +2,865 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Portfolio Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Gallery - Creative Developer</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #ec4899;
+      --accent-color: #8b5cf6;
+      --dark-bg: #0f172a;
+      --light-bg: #f8fafc;
+      --text-light: #64748b;
+      --text-dark: #1e293b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, var(--light-bg) 0%, #e2e8f0 100%);
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.5rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      color: var(--text-dark) !important;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after {
+      width: 80%;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 120px 0 80px;
+      background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.1) 0%, 
+        rgba(236, 72, 153, 0.1) 50%, 
+        rgba(139, 92, 246, 0.1) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%236366f1" stop-opacity="0.1"/><stop offset="100%" stop-color="%236366f1" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>') no-repeat center;
+      background-size: cover;
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 3rem;
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary-color);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+    }
+
+    /* Filter Buttons */
+    .filter-container {
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .filter-btn {
+      background: white;
+      border: 2px solid #e2e8f0;
+      color: var(--text-dark);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      border-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Gallery Grid */
+    .gallery-container {
+      margin-bottom: 5rem;
+    }
+
+    .gallery-item {
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .gallery-item.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-item.hide {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s ease;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      position: relative;
+      height: 100%;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-image {
+      position: relative;
+      overflow: hidden;
+      height: 250px;
+    }
+
+    .project-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .project-card:hover .project-image img {
+      transform: scale(1.1);
+    }
+
+    .project-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.9), 
+        rgba(236, 72, 153, 0.9));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+    }
+
+    .overlay-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .overlay-btn {
+      background: white;
+      color: var(--primary-color);
+      border: none;
+      padding: 12px;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .overlay-btn:hover {
+      transform: scale(1.1);
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .project-content {
+      padding: 1.5rem;
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .project-description {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-tag {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-weight: 500;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .project-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .project-link:hover {
+      color: var(--secondary-color);
+      transform: translateX(5px);
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+
+    .lightbox-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-close:hover {
+      transform: scale(1.2);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .lightbox-prev {
+      left: -70px;
+    }
+
+    .lightbox-next {
+      right: -70px;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      background: var(--dark-bg);
+      color: white;
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.1) 0%, 
+        rgba(236, 72, 153, 0.1) 100%);
+    }
+
+    .contact-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 80px 0 60px;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .filter-container {
+        margin-bottom: 2rem;
+      }
+
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .project-content {
+        padding: 1rem;
+      }
+
+      .lightbox-nav {
+        display: none;
+      }
+
+      .social-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .project-image {
+        height: 200px;
+      }
+
+      .overlay-buttons {
+        flex-direction: column;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <div class="container py-5">
-    <h1 class="text-center mb-4">My Work</h1>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <img src="https://source.unsplash.com/400x300/?web" class="img-fluid rounded shadow">
-      </div>
-      <div class="col-md-4">
-        <img src="https://source.unsplash.com/400x300/?design" class="img-fluid rounded shadow">
-      </div>
-      <div class="col-md-4">
-        <img src="https://source.unsplash.com/400x300/?code" class="img-fluid rounded shadow">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-code me-2"></i>Portfolio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#work">Work</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
       </div>
     </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-content text-center">
+        <h1>Creative Developer & Designer</h1>
+        <p>Crafting beautiful digital experiences with code and creativity</p>
+        <div class="hero-stats animate-on-scroll">
+          <div class="stat-item">
+            <span class="stat-number" data-target="50">0</span>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="3">0</span>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="100">0</span>
+            <div class="stat-label">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="work" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5 animate-on-scroll">
+        <h2 class="display-4 fw-bold mb-3">My Work</h2>
+        <p class="lead text-muted">A showcase of my latest projects and creative endeavors</p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-container animate-on-scroll">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="web">Web Development</button>
+        <button class="filter-btn" data-filter="design">UI/UX Design</button>
+        <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
+        <button class="filter-btn" data-filter="branding">Branding</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-container">
+        <div class="row" id="galleryGrid">
+          <!-- Projects will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div class="text-center animate-on-scroll">
+        <button class="btn btn-outline-primary btn-lg px-4" id="loadMore">
+          <i class="fas fa-plus me-2"></i>Load More Projects
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="container contact-content text-center">
+      <h2 class="display-4 fw-bold mb-4">Let's Work Together</h2>
+      <p class="lead mb-4">Have a project in mind? I'd love to hear about it!</p>
+      <a href="mailto:hello@portfolio.com" class="btn btn-outline-light btn-lg px-4 me-3">
+        <i class="fas fa-envelope me-2"></i>Get In Touch
+      </a>
+      <a href="#" class="btn btn-light btn-lg px-4">
+        <i class="fas fa-download me-2"></i>Download CV
+      </a>
+      
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-nav lightbox-prev" onclick="prevImage()">&#8249;</button>
+      <img class="lightbox-image" id="lightboxImage" src="" alt="">
+      <button class="lightbox-nav lightbox-next" onclick="nextImage()">&#8250;</button>
+    </div>
   </div>
-</body>
-</html>
-<a href="../my_projects/restaurant/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
-<a href="../my_projects/gallery/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
-<a href="../my_projects/login-page/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Project data
+    const projects = [
+      {
+        id: 1,
+        title: "E-Commerce Platform",
+        description: "Modern online shopping experience with advanced filtering and payment integration",
+        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "web",
+        tags: ["React", "Node.js", "MongoDB"],
+        liveUrl: "../my_projects/restaurant/index.html",
+        codeUrl: "#"
+      },
+      {
+        id: 2,
+        title: "Mobile Banking App",
+        description: "Secure and intuitive banking application with biometric authentication",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "mobile",
+        tags: ["React Native", "Firebase", "Redux"],
+        liveUrl: "../my_projects/gallery/index.html",
+        codeUrl: "#"
+      },
+      {
+        id: 3,
+        title: "Brand Identity Design",
+        description: "Complete brand identity package for tech startup including logo and guidelines",
+        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "branding",
+        tags: ["Illustrator", "Photoshop", "InDesign"],
+        liveUrl: "../my_projects/login-page/index.html",
+        codeUrl: "#"
+      },
+      {
+        id: 4,
+        title: "Dashboard Analytics",
+        description: "Real-time data visualization dashboard with interactive charts and reports",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "web",
+        tags: ["Vue.js", "D3.js", "API Integration"],
+        liveUrl: "#",
+        codeUrl: "#"
+      },
+      {
+        id: 5,
+        title: "Social Media App UI",
+        description: "Modern social media interface design with dark mode and accessibility features",
+        image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "design",
+        tags: ["Figma", "Prototyping", "User Research"],
+        liveUrl: "#",
+        codeUrl: "#"
+      },
+      {
+        id: 6,
+        title: "Portfolio Website",
+        description: "Responsive portfolio website with smooth animations and modern design",
+        image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "web",
+        tags: ["HTML5", "CSS3", "JavaScript"],
+        liveUrl: "#",
+        codeUrl: "#"
+      },
+      {
+        id: 7,
+        title: "Fitness Tracking App",
+        description: "Health and fitness tracking mobile application with workout plans",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "mobile",
+        tags: ["Swift", "HealthKit", "Core Data"],
+        liveUrl: "#",
+        codeUrl: "#"
+      },
+      {
+        id: 8,
+        title: "Restaurant Branding",
+        description: "Complete visual identity for upscale restaurant chain including menus and signage",
+        image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "branding",
+        tags: ["Brand Strategy", "Print Design", "Typography"],
+        liveUrl: "#",
+        codeUrl: "#"
+      },
+      {
+        id: 9,
+        title: "Task Management Tool",
+        description: "Collaborative project management platform with team communication features",
+        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+        category: "web",
+        tags: ["Angular", "TypeScript", "PostgreSQL"],
+        liveUrl: "#",
+        codeUrl: "#"
+      }
+    ];
+
+    let currentFilter = 'all';
+    let displayedProjects = 6;
+    let currentLightboxIndex = 0;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      renderProjects();
+      initializeAnimations();
+      initializeCounters();
+      initializeFilters();
+      initializeLoadMore();
+    });
+
+    // Render projects
+    function renderProjects() {
+      const grid = document.getElementById('galleryGrid');
+      const filteredProjects = currentFilter === 'all' 
+        ? projects 
+        : projects.filter(p => p.category === currentFilter);
+      
+      const projectsToShow = filteredProjects.slice(0, displayedProjects);
+      
+      grid.innerHTML = projectsToShow.map((project, index) => `
+        <div class="col-lg-4 col-md-6 gallery-item" data-category="${project.category}">
+          <div class="project-card">
+            <div class="project-image">
+              <img src="${project.image}" alt="${project.title}" loading="lazy">
+              <div class="project-overlay">
+                <div class="overlay-buttons">
+                  <button class="overlay-btn" onclick="openLightbox(${index})" title="View Image">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="overlay-btn" onclick="openProject('${project.liveUrl}')" title="Live Demo">
+                    <i class="fas fa-external-link-alt"></i>
+                  </button>
+                  <button class="overlay-btn" onclick="openProject('${project.codeUrl}')" title="View Code">
+                    <i class="fas fa-code"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="project-content">
+              <h5 class="project-title">${project.title}</h5>
+              <p class="project-description">${project.description}</p>
+              <div class="project-tags">
+                ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+              </div>
+              <div class="project-links">
+                <a href="${project.liveUrl}" class="project-link" target="_blank">
+                  <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                </a>
+                <a href="${project.codeUrl}" class="project-link" target="_blank">
+                  <i class="fas fa-code me-1"></i>Source Code
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Animate items
+      setTimeout(() => {
+        document.querySelectorAll('.gallery-item').forEach((item, index) => {
+          setTimeout(() => {
+            item.classList.add('show');
+          }, index * 100);
+        });
+      }, 100);
+
+      // Update load more button
+      const loadMoreBtn = document.getElementById('loadMore');
+      if (displayedProjects >= filteredProjects.length) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        loadMoreBtn.style.display = 'inline-block';
+      }
+    }
+
+    // Filter functionality
+    function initializeFilters() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Update active state
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Update filter and reset display count
+          currentFilter = this.getAttribute('data-filter');
+          displayedProjects = 6;
+          
+          // Hide current items
+          document.querySelectorAll('.gallery-item').forEach(item => {
+            item.classList.add('hide');
+          });
+          
+          // Render filtered items
+          setTimeout(() => {
+            renderProjects();
+          }, 300);
+        });
+      });
+    }
+
+    // Load more functionality
+    function initializeLoadMore() {
+      <a href="../my_projects/portfolio-gallery/index.html">Live Demo</a>

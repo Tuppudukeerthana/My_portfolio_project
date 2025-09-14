@@ -2,59 +2,803 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Foodie Restaurant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodie Restaurant - Premium Dining Experience</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #ff6b35;
+      --secondary-color: #2c3e50;
+      --accent-color: #f39c12;
+      --light-bg: #f8f9fa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 107, 53, 0.95) !important;
+    }
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white !important;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .nav-link {
+      color: white !important;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--secondary-color) !important;
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.9), rgba(243, 156, 18, 0.9)),
+                  url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3') center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    .btn-hero {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-radius: 50px;
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+      transition: all 0.3s ease;
+      animation: fadeInUp 1s ease 0.6s both;
+    }
+
+    .btn-hero:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+    }
+
+    .menu-section {
+      padding: 100px 0;
+      background: var(--light-bg);
+    }
+
+    .section-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--secondary-color);
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: all 0.4s ease;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    }
+
+    .menu-card img {
+      height: 250px;
+      object-fit: cover;
+      transition: all 0.4s ease;
+    }
+
+    .menu-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--secondary-color);
+      margin-bottom: 1rem;
+    }
+
+    .card-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .rating {
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .btn-order {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border: none;
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .stats-section {
+      background: linear-gradient(135deg, var(--secondary-color), #34495e);
+      color: white;
+      padding: 80px 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--accent-color);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .cart-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .floating-cart {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+      transition: all 0.3s ease;
+      z-index: 998;
+    }
+
+    .floating-cart:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+    }
+
+    footer {
+      background: var(--secondary-color);
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h5 {
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .footer-section a {
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--accent-color);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .cart-sidebar {
+        width: 100%;
+        right: -100%;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">Foodie</a>
+      <a class="navbar-brand" href="#"><i class="fas fa-utensils me-2"></i>Foodie</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 
-  <header class="bg-warning text-dark text-center py-5">
-    <h1>Welcome to Foodie</h1>
-    <p>Delicious meals, delivered with love</p>
-  </header>
-
-  <section class="container py-5">
-    <h2 class="text-center mb-4">Our Menu</h2>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card">
-          <img src="https://source.unsplash.com/300x200/?pizza" class="card-img-top">
-          <div class="card-body text-center">
-            <h5>Pizza</h5>
-            <p>Cheesy and tasty</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card">
-          <img src="https://source.unsplash.com/300x200/?burger" class="card-img-top">
-          <div class="card-body text-center">
-            <h5>Burger</h5>
-            <p>Juicy and fresh</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card">
-          <img src="https://source.unsplash.com/300x200/?pasta" class="card-img-top">
-          <div class="card-body text-center">
-            <h5>Pasta</h5>
-            <p>Hot and creamy</p>
-          </div>
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center text-white hero-content">
+          <h1>Welcome to Foodie</h1>
+          <p>Experience culinary excellence delivered with passion</p>
+          <button class="btn btn-hero text-white" onclick="scrollToMenu()">
+            <i class="fas fa-utensils me-2"></i>Explore Menu
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="bg-dark text-white text-center py-3">
-    © 2025 Foodie Restaurant
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 stat-item animate-on-scroll">
+          <span class="stat-number" data-target="1247">0</span>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="col-md-3 stat-item animate-on-scroll">
+          <span class="stat-number" data-target="50">0</span>
+          <div class="stat-label">Menu Items</div>
+        </div>
+        <div class="col-md-3 stat-item animate-on-scroll">
+          <span class="stat-number" data-target="15">0</span>
+          <div class="stat-label">Expert Chefs</div>
+        </div>
+        <div class="col-md-3 stat-item animate-on-scroll">
+          <span class="stat-number" data-target="5">0</span>
+          <div class="stat-label">Years Experience</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu" class="menu-section">
+    <div class="container">
+      <h2 class="section-title text-center animate-on-scroll">Our Premium Menu</h2>
+      <div class="row" id="menuContainer">
+        <!-- Menu items will be populated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h5><i class="fas fa-utensils me-2"></i>Foodie Restaurant</h5>
+          <p>Delivering exceptional culinary experiences since 2019. Every dish tells a story of passion and perfection.</p>
+        </div>
+        <div class="footer-section">
+          <h5>Quick Links</h5>
+          <div><a href="#home">Home</a></div>
+          <div><a href="#menu">Menu</a></div>
+          <div><a href="#about">About Us</a></div>
+          <div><a href="#contact">Contact</a></div>
+        </div>
+        <div class="footer-section">
+          <h5>Contact Info</h5>
+          <div><i class="fas fa-phone me-2"></i>(555) 123-4567</div>
+          <div><i class="fas fa-envelope me-2"></i>hello@foodierestaurant.com</div>
+          <div><i class="fas fa-map-marker-alt me-2"></i>123 Culinary Street, Food City</div>
+        </div>
+        <div class="footer-section">
+          <h5>Follow Us</h5>
+          <div>
+            <a href="#" class="me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="me-3"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+          </div>
+        </div>
+      </div>
+      <hr style="border-color: #34495e;">
+      <div class="text-center">
+        <p>&copy; 2025 Foodie Restaurant. All rights reserved. | Crafted with <i class="fas fa-heart text-danger"></i> for food lovers</p>
+      </div>
+    </div>
   </footer>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4><i class="fas fa-shopping-cart me-2"></i>Your Order</h4>
+      <button class="btn-close" onclick="toggleCart()"></button>
+    </div>
+    <div id="cartItems">
+      <div class="text-center text-muted py-5">
+        <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+        <p>Your cart is empty</p>
+      </div>
+    </div>
+    <div id="cartTotal" class="border-top pt-3 mt-3" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>Total: $<span id="totalAmount">0.00</span></strong>
+      </div>
+      <button class="btn btn-success w-100" onclick="checkout()">
+        <i class="fas fa-credit-card me-2"></i>Checkout
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button class="floating-cart" onclick="toggleCart()" id="floatingCart">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Menu data
+    const menuItems = [
+      {
+        id: 1,
+        name: "Margherita Pizza",
+        description: "Fresh mozzarella, tomatoes, and basil on our signature wood-fired crust",
+        price: 18.99,
+        image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Pizza",
+        rating: 4.8
+      },
+      {
+        id: 2,
+        name: "Gourmet Burger",
+        description: "Angus beef patty with caramelized onions, aged cheddar, and truffle aioli",
+        price: 24.99,
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Burgers",
+        rating: 4.9
+      },
+      {
+        id: 3,
+        name: "Truffle Pasta",
+        description: "House-made fettuccine with black truffle, parmesan, and wild mushrooms",
+        price: 28.99,
+        image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Pasta",
+        rating: 4.7
+      },
+      {
+        id: 4,
+        name: "Grilled Salmon",
+        description: "Atlantic salmon with lemon herb butter and seasonal vegetables",
+        price: 32.99,
+        image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Seafood",
+        rating: 4.6
+      },
+      {
+        id: 5,
+        name: "Caesar Salad",
+        description: "Crisp romaine, house-made croutons, parmesan, and our signature dressing",
+        price: 16.99,
+        image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Salads",
+        rating: 4.5
+      },
+      {
+        id: 6,
+        name: "Chocolate Lava Cake",
+        description: "Warm chocolate cake with molten center, served with vanilla ice cream",
+        price: 12.99,
+        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&w=500&h=300&fit=crop",
+        category: "Desserts",
+        rating: 4.9
+      }
+    ];
+
+    let cart = [];
+
+    // Populate menu
+    function populateMenu() {
+      const container = document.getElementById('menuContainer');
+      container.innerHTML = menuItems.map(item => `
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="menu-card animate-on-scroll">
+            <img src="${item.image}" alt="${item.name}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">${item.name}</h5>
+              <div class="rating mb-2">
+                ${generateStars(item.rating)} <small>(${item.rating})</small>
+              </div>
+              <p class="card-text">${item.description}</p>
+              <div class="card-price">$${item.price}</div>
+              <button class="btn btn-order text-white w-100" onclick="addToCart(${item.id})">
+                <i class="fas fa-plus me-2"></i>Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function generateStars(rating) {
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 !== 0;
+      let stars = '';
+      
+      for(let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star"></i>';
+      }
+      
+      if(hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt"></i>';
+      }
+      
+      return stars;
+    }
+
+    // Cart functionality
+    function addToCart(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      const existingItem = cart.find(c => c.id === itemId);
+      
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({...item, quantity: 1});
+      }
+      
+      updateCart();
+      showNotification(`${item.name} added to cart!`);
+    }
+
+    function removeFromCart(itemId) {
+      cart = cart.filter(item => item.id !== itemId);
+      updateCart();
+    }
+
+    function updateQuantity(itemId, change) {
+      const item = cart.find(c => c.id === itemId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          removeFromCart(itemId);
+        } else {
+          updateCart();
+        }
+      }
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartBadge = document.getElementById('cartBadge');
+      const cartTotal = document.getElementById('cartTotal');
+      const totalAmount = document.getElementById('totalAmount');
+      
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      // Update badge
+      if (totalItems > 0) {
+        cartBadge.style.display = 'flex';
+        cartBadge.textContent = totalItems;
+      } else {
+        cartBadge.style.display = 'none';
+      }
+      
+      // Update cart items
+      if (cart.length === 0) {
+        cartItems.innerHTML = `
+          <div class="text-center text-muted py-5">
+            <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+            <p>Your cart is empty</p>
+          </div>
+        `;
+        cartTotal.style.display = 'none';
+      } else {
+        cartItems.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <div>
+              <h6>${item.name}</h6>
+              <small class="text-muted">$${item.price} each</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+              <span class="mx-2">${item.quantity}</span>
+              <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+              <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeFromCart(${item.id})">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+        
+        totalAmount.textContent = total.toFixed(2);
+        cartTotal.style.display = 'block';
+      }
+    }
+
+    function toggleCart() {
+      const sidebar = document.getElementById('cartSidebar');
+      const overlay = document.getElementById('cartOverlay');
+      
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    function checkout() {
+      if (cart.length === 0) return;
+      
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      showNotification(`Order placed! Total: $${total.toFixed(2)}. Thank you for choosing Foodie!`);
+      cart = [];
+      updateCart();
+      toggleCart();
+    }
+
+    function showNotification(message) {
+      // Create toast notification
+      const toast = document.createElement('div');
+      toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed';
+      toast.style.cssText = 'top: 20px; right: 20px; z-index: 1051;';
+      toast.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      `;
+      
+      document.body.appendChild(toast);
+      const bsToast = new bootstrap.Toast(toast);
+      bsToast.show();
+      
+      toast.addEventListener('hidden.bs.toast', () => {
+        document.body.removeChild(toast);
+      });
+    }
+
+    // Smooth scrolling
+    function scrollToMenu() {
+      document.getElementById('menu').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
+    // Scroll animations
+    function handleScrollAnimations() {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          }
+        });
+      });
+
+      elements.forEach(el => observer.observe(el));
+    }
+
+    // Counter animation
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-number');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const counter = entry.target;
+            const target = parseInt(counter.getAttribute('data-target'));
+            const increment = target / 100;
+            let current = 0;
+            
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= target) {
+                counter.textContent = target;
+                clearInterval(timer);
+              } else {
+                counter.textContent = Math.floor(current);
+              }
+            }, 20);
+            
+            observer.unobserve(counter);
+          }
+        });
+      });
+
+      counters.forEach(counter => observer.observe(counter));
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      populateMenu();
+      handleScrollAnimations();
+      animateCounters();
+    });
+
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+      const sidebar = document.getElementById('cartSidebar');
+      const floatingCart = document.getElementById('floatingCart');
+      
+      if (!sidebar.contains(e.target) && !floatingCart.contains(e.target) && sidebar.classList.contains('open')) {
+        toggleCart();
+      }
+    });
+  </script>
 </body>
 </html>
-<a href="../my_projects/restaurant/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
-<a href="../my_projects/gallery/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
-<a href="../my_projects/login-page/index.html" class="btn btn-primary btn-sm" target="_blank">Live Demo</a>
+<a href="../my_projects/restaurant-ui/index.html">Live Demo</a>
